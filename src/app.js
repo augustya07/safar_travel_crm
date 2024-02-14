@@ -1,0 +1,58 @@
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+// Import routes using ES6
+import hotelRoutes from './routes/hotelRoutes.js';
+import activityRoutes from './routes/activityRoutes.js';
+import transportRoute from './routes/transportRoutes.js';
+import serviceRoutes from './routes/serviceRoutes.js';
+import itineraryRoutes from './routes/itineraryRoutes.js';
+
+
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
+
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Use routes
+app.use(express.json());
+
+
+const connectToDatabase = async () => {
+    try {
+      const username = encodeURIComponent(process.env.DB_USERNAME);
+      const password = encodeURIComponent(process.env.DB_PASSWORD);
+      const dbname = process.env.DB_NAME;
+      
+      const connectionString = `mongodb+srv://${username}:${password}@safar.gi753b9.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+  
+      await mongoose.connect(connectionString, { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true 
+      });
+      console.log('MongoDB connection established');
+    } catch (error) {
+      console.error('MongoDB connection failed:', error.message);
+    }
+  };
+  
+  connectToDatabase();
+
+app.use('/api/v1/hotels', hotelRoutes);
+app.use('/api/v1/activity', activityRoutes);
+app.use('/api/v1/transport', transportRoute);
+app.use('/api/v1/services', serviceRoutes);
+app.use('/api/v1/itineraries', itineraryRoutes);
+
+
+
+export default app;
