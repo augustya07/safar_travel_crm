@@ -73,7 +73,6 @@ const hotelSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  // You may want to add more fields that are relevant to your application
 }, { timestamps: true });
 
 // Index to speed up searches on frequently accessed fields
