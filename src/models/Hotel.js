@@ -27,6 +27,14 @@ const amenitiesSchema = new mongoose.Schema({
   // ... other amenities
 });
 
+// Define schema for room information
+const roomSchema = new mongoose.Schema({
+  type: { type: String, required: true, trim: true },
+  numberOfRooms: { type: Number, required: true, min: 1 },
+  guestsPerRoom: { type: Number, required: true, min: 1 },
+});
+
+
 const hotelSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true, index: true },
   rating: { 
@@ -73,6 +81,20 @@ const hotelSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  category: { 
+    type: String, 
+    required: true, 
+    enum: ['2 Star', '3 Star', '4 Star', '5 Star'],
+    trim: true 
+  },
+
+  mealPlan: {
+    type: String,
+    required: true,
+    enum: ['Breakfast', 'Half Board', 'Full Board', 'All Inclusive', 'No Meals'],
+  },
+  roomInfo: roomSchema,
+
 }, { timestamps: true });
 
 // Index to speed up searches on frequently accessed fields
