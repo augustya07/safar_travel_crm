@@ -8,6 +8,10 @@ import ItineraryTransportController from '../controllers/inineraryTransportContr
 
 const router = express.Router();
 
+
+router.get('/search-itineraries', ItineraryController.searchItineraries);
+
+
 // Route to create a new itinerary
 router.post('/', ItineraryController.createItinerary);
 
@@ -42,6 +46,8 @@ router.patch('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId',
 
 // Remove Transport from a Day Plan
 router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId', ItineraryTransportController.removeTransportFromDayPlan);
+
+
 
 
 

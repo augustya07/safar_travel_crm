@@ -1,21 +1,3 @@
-// // models/Hotel.js
-
-// import mongoose from 'mongoose';
-
-// const hotelSchema = new mongoose.Schema({
-//   name: { type: String, required: true },
-//   rating: { type: Number, required: true },
-//   price: { type: Number, required: true },
-//   originalPrice: Number,
-//   deal: String,
-//   location: { type: String, required: true },
-// //   amenities: [String], // Assuming hotels have amenities listed
-//   imageUrl: { type: String } // Assuming there's an image for each hotel
-// }, { timestamps: true });
-
-// const Hotel = mongoose.model('Hotel', hotelSchema);
-// export default Hotel;
-
 import mongoose from 'mongoose';
 
 // Define schema for the amenities that a hotel might have
@@ -84,7 +66,7 @@ const hotelSchema = new mongoose.Schema({
   category: { 
     type: String, 
     required: true, 
-    enum: ['2 Star', '3 Star', '4 Star', '5 Star'],
+    enum: ['2-Star', '3-Star', '4-Star', '5-Star'],
     trim: true 
   },
 

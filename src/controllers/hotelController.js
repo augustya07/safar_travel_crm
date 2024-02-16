@@ -40,23 +40,25 @@ export const getHotelById = async (req, res) => {
 };
 
 export const createHotels = async (req, res) => {
-    try {
-      let newHotels;
-      // Check if the request contains an array of hotels
-      if (Array.isArray(req.body)) {////
-        // Handle multiple hotel creation
-        newHotels = await Hotel.insertMany(req.body, { ordered: false });
-      } else {
-        // Handle single hotel creation
-        const newHotel = new Hotel(req.body);
-        await newHotel.save();
-        newHotels = [newHotel];
-      }
-      res.status(201).json(newHotels);
-    } catch (error) {
-      // Error handling here
+  try {
+    let newHotels;
+    // Check if the request contains an array of hotels
+    if (Array.isArray(req.body)) {
+      // Log the request body for debugging purposes
+      console.log(req.body);
+      newHotels = await Hotel.insertMany(req.body, { ordered: false });
+    } else {
+      // Handle single hotel creation
+      const newHotel = new Hotel(req.body);
+      await newHotel.save();
+      newHotels = [newHotel];
     }
-  };
+    res.status(201).json(newHotels);
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    res.status(500).json({ message: error.message }); // Send error message in response
+  }
+};
 
 
 

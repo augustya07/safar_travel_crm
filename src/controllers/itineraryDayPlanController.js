@@ -174,9 +174,69 @@ updateDayPlan: async (req, res) => {
       console.error('Error updating hotel in day plan:', error);
       res.status(500).json({ message: 'Error updating hotel in day plan', error: error.message });
     }
-}
-,
+},
 
+searchItineraries: async (req, res) => {
+  try {
+    // Extract query parameters
+    const {
+      destination,
+      travelDate,
+      numberOfNights,
+      hotelCategory,
+      mealPlan,
+      minBudget,
+      maxBudget
+      // ... any other parameters
+    } = req.query;
+
+    // Initial match stage to filter itineraries based on non-hotel criteria
+    let matchStage = {};
+    // Add other non-hotel criteria to the match stage as needed
+
+    // Aggregation pipeline
+    let aggregationPipeline = [
+      { $match: matchStage },
+      { $unwind: '$dayPlans' },
+      { $unwind: '$dayPlans.items' },
+      {
+        $lookup: {
+          from: 'hotels', // Assuming 'hotels' is the name of the collection
+          localField: 'dayPlans.items.itemId',
+          foreignField: '_id',
+          as: 'hotelDetails'
+        }
+      },
+      { $unwind: '$hotelDetails' },
+      {
+        $match: {
+          // Filter based on the hotel category and meal plan if provided
+          ...(hotelCategory && {'hotelDetails.category': hotelCategory}),
+          ...(mealPlan && {'hotelDetails.mealPlan': mealPlan})
+        }
+      },
+      {
+        $group: {
+          _id: '$_id', // Group by itinerary id
+          general: { $first: '$general' },
+          availability: { $first: '$availability' },
+          otherDetails: { $first: '$otherDetails' },
+          dayPlans: { $push: '$dayPlans' } // Collect day plans
+        }
+      },
+      // You can add more stages here if necessary, such as to re-project the fields
+    ];
+
+    // Execute the aggregation pipeline
+    const itineraries = await Itinerary.aggregate(aggregationPipeline);
+
+    // Send the result back to the client
+    res.status(200).json(itineraries);
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({ error: error.message });
+  }
+},
 
   
   // Additional methods for fetching, updating, and deleting itineraries can be added here.

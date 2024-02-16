@@ -1,5 +1,5 @@
 // pages/index.js
-import CreateItineraryForm from './components/CreateItineraryForm';
+import CreateItineraryForm from './components/CreateItineraryForm.tsx';
 
 export default function Home() {
   return (
