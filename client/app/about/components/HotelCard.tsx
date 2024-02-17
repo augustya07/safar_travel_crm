@@ -1,6 +1,7 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
+import ChangeHotelPopup from './ChangeHotelPopup'
 
 interface HotelCardProps {
   location: string;
@@ -42,12 +43,24 @@ const HotelCard: React.FC<HotelCardProps> = ({
   roomDetails,
   price,
   imageUrl,
-}) => (
+}) => {
+
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const togglePopup = () => setIsPopupOpen(!isPopupOpen);
+
+    const handleSelectHotel = (hotel: any) => {
+        console.log('Selected hotel:', hotel);
+        // TODO: Update state or perform actions based on the selected hotel
+      };
+
+    return (
+<>
   <div className="border rounded-lg overflow-hidden shadow-lg mx-auto max-w-md bg-white">
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <div className="text-gray-800 text-sm">{location} | {dateRange} | {numNights} Nights</div>
-        <button className="text-red-600 hover:text-red-800 text-sm font-semibold">Change Hotel</button>
+        <button onClick={togglePopup} className="text-red-600 hover:text-red-800 text-sm font-semibold">Change Hotel</button>
       </div>
       <div className="flex items-start">
         <img className="h-20 w-20 object-cover rounded-lg mr-4" src={imageUrl} alt={hotelName} />
@@ -69,7 +82,11 @@ const HotelCard: React.FC<HotelCardProps> = ({
         <button className="text-blue-600 hover:text-blue-800 text-sm font-semibold">Change Room</button>
       </div>
     </div>
+    {isPopupOpen && <ChangeHotelPopup onClose={togglePopup}  onSelectHotel={handleSelectHotel}
+ />}
   </div>
-);
+  </>
+    )}
+
 
 export default HotelCard;

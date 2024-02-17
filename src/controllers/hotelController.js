@@ -2,6 +2,58 @@
 
 import Hotel from '../models/Hotel.js';
 
+export const searchHotels = async (req, res) => {
+  try {
+    const query = {};
+    const { name, rating, minPrice, maxPrice, location, category, mealPlan, amenities } = req.query;
+
+    if (name) {
+      query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+    }
+
+    if (rating) {
+      query.rating = rating;
+    }
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    if (location) {
+      query.location = { $regex: location, $options: 'i' }; // Case-insensitive search
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (mealPlan) {
+      query.mealPlan = mealPlan;
+    }
+
+    if (amenities) {
+      // Assuming amenities is a string of comma-separated values
+      const amenitiesList = amenities.split(',');
+      query['amenities.items'] = { $all: amenitiesList }; // This assumes your amenitiesSchema defines items as an array of strings
+    }
+
+    const hotels = await Hotel.find(query);
+
+    res.status(200).json({
+      success: true,
+      count: hotels.length,
+      data: hotels
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'Server Error: ' + err.message
+    });
+  }
+};
+
 // Get all hotels
 export const getAllHotels = async (req, res) => {
   try {
