@@ -29,8 +29,8 @@ const itemMetadataSchema = new mongoose.Schema({
 });
 
 const itemSchema = new mongoose.Schema({
-  itemType: { type: String, enum: ['Hotel', 'Transport', 'Activity', 'Service'], required: true },
-  itemId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'items.itemType' },
+  itemType: { type: String, enum: ['Hotel', 'Transport', 'Activity', 'Service'] },
+  itemId: { type: mongoose.Schema.Types.ObjectId, refPath: 'items.itemType' },
   metadata: itemMetadataSchema,
 });
 

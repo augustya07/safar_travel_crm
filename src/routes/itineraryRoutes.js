@@ -15,6 +15,8 @@ router.get('/search-itineraries', ItineraryController.searchItineraries);
 // Route to create a new itinerary
 router.post('/', ItineraryController.createItinerary);
 
+router.get('/:id',ItineraryController.getItineraryById)
+
 // Route to update a hotel in a specific day plan of an itinerary
 // Assuming URLs like /itineraries/:itineraryId/dayPlans/:dayPlanId/hotels/:itemId
 // router.patch('/itineraries/:itineraryId/dayPlans/:dayPlanId/hotels/:itemId', ItineraryHotelController.updateHotelInDayPlan);

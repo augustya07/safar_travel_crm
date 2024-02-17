@@ -76,7 +76,7 @@ const CreateItineraryForm: React.FC = () => {
             <label htmlFor="hotelCategory" className="block mb-2 text-sm font-medium text-gray-900">Hotel Category</label>
             <select {...register('hotelCategory')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
               <option value="">Select Category</option>
-              <option value="3-star">2-Star</option>
+              <option value="2-star">2-Star</option>
               <option value="3-star">3-Star</option>
               <option value="4-star">4-Star</option>
               <option value="5-star">5-Star</option>
@@ -91,7 +91,7 @@ const CreateItineraryForm: React.FC = () => {
               <option value="bed-breakfast">Bed & Breakfast</option>
               <option value="half-board">Half Board</option>
               <option value="full-board">Full Board</option>
-              <option value="All Inclusive">All Inclusive</option>
+              <option value="all-Inclusive">All Inclusive</option>
             </select>
           </div>
 
