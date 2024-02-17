@@ -71,7 +71,7 @@ const ChangeHotelPopup: React.FC<ChangeHotelPopupProps> = ({ onClose, onSelectHo
           <input
             {...register('name')}
             placeholder="Search hotels by name"
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
             type="text"
           />
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
@@ -79,7 +79,7 @@ const ChangeHotelPopup: React.FC<ChangeHotelPopupProps> = ({ onClose, onSelectHo
           <input
             {...register('rating')}
             placeholder="Rating"
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
             type="text"
           />
           {errors.rating && <p className="text-red-500">{errors.rating.message}</p>}
@@ -87,7 +87,7 @@ const ChangeHotelPopup: React.FC<ChangeHotelPopupProps> = ({ onClose, onSelectHo
           <input
             {...register('minPrice')}
             placeholder="Min Price"
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
             type="text"
           />
           {errors.minPrice && <p className="text-red-500">{errors.minPrice.message}</p>}
@@ -95,7 +95,7 @@ const ChangeHotelPopup: React.FC<ChangeHotelPopupProps> = ({ onClose, onSelectHo
           <input
             {...register('maxPrice')}
             placeholder="Max Price"
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
             type="text"
           />
           {errors.maxPrice && <p className="text-red-500">{errors.maxPrice.message}</p>}
@@ -103,14 +103,14 @@ const ChangeHotelPopup: React.FC<ChangeHotelPopupProps> = ({ onClose, onSelectHo
           <input
             {...register('location')}
             placeholder="Location"
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
             type="text"
           />
           {errors.location && <p className="text-red-500">{errors.location.message}</p>}
 
           <select
             {...register('category')}
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
           >
             <option value="">Select Category</option>
             <option value="2-Star">2-Star</option>
@@ -122,7 +122,7 @@ const ChangeHotelPopup: React.FC<ChangeHotelPopupProps> = ({ onClose, onSelectHo
 
           <select
             {...register('mealPlan')}
-            className="border p-2 rounded-lg w-full mb-4"
+            className="border p-2 rounded-lg w-full mb-4 text-black"
           >
             <option value="">Select Meal Plan</option>
             <option value="Breakfast">Breakfast</option>

@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import ChangeHotelPopup from './ChangeHotelPopup'
 
+import useItineraryStore from '../../store/itineraryStore';
+
+
 interface HotelCardProps {
   location: string;
   dateRange: string;
@@ -49,10 +52,45 @@ const HotelCard: React.FC<HotelCardProps> = ({
 
     const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
-    const handleSelectHotel = (hotel: any) => {
-        console.log('Selected hotel:', hotel);
-        // TODO: Update state or perform actions based on the selected hotel
-      };
+    const handleSelectHotel = async (hotel: any) => {
+        console.log('Selected hotel:', hotel._id);
+        
+        // Define the URL for the PATCH request
+        const url = `http://localhost:4000/api/v1/itineraries/itinerary/65cc9d7e36cc1a719d95350b/dayplan/65cc9d7e36cc1a719d95350e/hotel/65ccebf08edcc2e7d565196c`;
+    
+        // Create the request body
+        const requestBody = {
+            hotelId: hotel._id
+        };
+    
+        try {
+            // Perform the PATCH request
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include any additional headers here, like authorization headers if needed
+                },
+                body: JSON.stringify(requestBody)
+            });
+    
+            // Check if the request was successful
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log('Update success:', data);
+    
+            await useItineraryStore.getState().refetchItinerary();
+
+
+    
+        } catch (error) {
+            console.error('Failed to update the hotel:', error);
+            // Handle errors here, such as by showing an error message to the user
+        }
+    };
 
     return (
 <>

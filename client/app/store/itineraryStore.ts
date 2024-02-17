@@ -53,6 +53,12 @@ const useItineraryStore = create<ItineraryStoreState>((set, get) => ({
   itinerary: null,
   setItinerary: (itineraryData: Itinerary) => set({ itinerary: itineraryData }),
   getFirstHotelDetails: () => extractFirstHotelDetails(get().itinerary),
+  refetchItinerary: async () => {
+    const response = await fetch('http://localhost:4000/api/v1/itineraries/65cc9d7e36cc1a719d95350b');
+    if (!response.ok) throw new Error('Failed to fetch itinerary');
+    const data = await response.json();
+    set({ itinerary: data });
+  }
 }));
 
 export default useItineraryStore;
