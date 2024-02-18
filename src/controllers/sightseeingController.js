@@ -2,13 +2,15 @@ import Sightseeing from '../models/Sightseeing.js';
 
 // Add a new sightseeing location
 const addSightseeing = async (req, res) => {
-  try {
-    const newSightseeing = new Sightseeing(req.body);
-    await newSightseeing.save();
-    res.status(201).json(newSightseeing);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+    try {
+        // Check if the request body is an array
+        const sightseeingData = Array.isArray(req.body) ? req.body : [req.body];
+        // Use insertMany to insert single or multiple documents
+        const newSightseeings = await Sightseeing.insertMany(sightseeingData);
+        res.status(201).json(newSightseeings);
+      } catch (error) {
+        res.status(400).json({ message: error.message });
+      }
 };
 
 // Get all sightseeing locations
@@ -57,6 +59,26 @@ const deleteSightseeing = async (req, res) => {
   }
 };
 
+const searchSightseeing = async (req, res) => {
+    try {
+      const { query } = req.query; // Assuming the search query comes from a query string parameter named 'query'
+      // Search in name, description, and location fields
+      const searchResult = await Sightseeing.find({
+        $or: [
+          { name: { $regex: query, $options: 'i' } }, // Case-insensitive search in the name field
+          { description: { $regex: query, $options: 'i' } }, // Case-insensitive search in the description field
+          { location: { $regex: query, $options: 'i' } } // Case-insensitive search in the location field
+        ]
+      });
+      res.status(200).json(searchResult);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+
+  
+
 // Exporting all controller functions as an object
 export const sightseeingController = {
   addSightseeing,
@@ -64,4 +86,5 @@ export const sightseeingController = {
   getSightseeingById,
   updateSightseeing,
   deleteSightseeing,
+  searchSightseeing
 };

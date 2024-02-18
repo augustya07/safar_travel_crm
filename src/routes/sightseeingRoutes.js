@@ -3,10 +3,10 @@ import { sightseeingController } from '../controllers/sightseeingController.js';
 
 const router = express.Router();
 
-router.post('/sightseeings', sightseeingController.addSightseeing);
-router.get('/sightseeings', sightseeingController.getSightseeings);
-router.get('/sightseeings/:id', sightseeingController.getSightseeingById);
-router.put('/sightseeings/:id', sightseeingController.updateSightseeing);
-router.delete('/sightseeings/:id', sightseeingController.deleteSightseeing);
+router.post('/', sightseeingController.addSightseeing);
+router.get('/', sightseeingController.getSightseeings);
+router.get('/:id', sightseeingController.getSightseeingById);
+router.put('/:id', sightseeingController.updateSightseeing);
+router.delete('/:id', sightseeingController.deleteSightseeing);
 
 export default router;

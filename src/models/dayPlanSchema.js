@@ -20,19 +20,8 @@
 // models/DayPlan.js
 
 import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
-const itemMetadataSchema = new mongoose.Schema({
-  bookingStatus: { type: String, enum: ['Booked', 'Pending', 'Cancelled'], default: 'Pending' },
-  dates: [Date],
-  notes: String,
-  // Any other relevant fields
-});
-
-const itemSchema = new mongoose.Schema({
-  itemType: { type: String, enum: ['Hotel', 'Transport', 'Activity', 'Service'] },
-  itemId: { type: mongoose.Schema.Types.ObjectId, refPath: 'items.itemType' },
-  metadata: itemMetadataSchema,
-});
 
 const dayPlanSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
@@ -48,7 +37,11 @@ const dayPlanSchema = new mongoose.Schema({
       message: 'Please enter a valid image URL'
     }
   },
-  items: [itemSchema],
+  hotels: [{ type: Schema.Types.ObjectId, ref: 'Hotel' }],
+  transports: [{ type: Schema.Types.ObjectId, ref: 'Transport' }],
+  activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
+  services: [{ type: Schema.Types.ObjectId, ref: 'Service' }],
+  sightseeing: [{ type: Schema.Types.ObjectId, ref: 'Sightseeing' }],
 }, { timestamps: true });
 
 export default dayPlanSchema;

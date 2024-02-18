@@ -1,4 +1,5 @@
 import Itinerary from '../models/Itinerary.js';
+import { mongoose } from 'mongoose';
 
 // Helper function to find itinerary and day plan
 async function findItineraryAndDayPlan(itineraryId, dayPlanId) {
@@ -17,47 +18,64 @@ async function findItineraryAndDayPlan(itineraryId, dayPlanId) {
 
 const ItineraryHotelController = {
   // Add a Hotel to a Day Plan
-  addHotelToDayPlan: async (req, res) => {
-    const { itineraryId, dayPlanId } = req.params;
-    const hotelData = req.body; // This should be validated and sanitized
-
-    try {
-      const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
-
-      dayPlan.items.push({
-        itemType: 'Hotel',
-        itemId: hotelData.hotelId, // Assume hotelId is valid and exists
-        metadata: hotelData.metadata // Include bookingStatus, dates, notes, etc.
-      });
-
-      await itinerary.save();
-      res.status(201).json({ message: 'Hotel added successfully to day plan', itinerary });
-    } catch (error) {
-      console.error('Error in addHotelToDayPlan:', error);
-      res.status(500).json({ message: error.message });
-    }
-  },
+ 
+    addHotelToDayPlan: async (req, res) => {
+      const { itineraryId, dayPlanId } = req.params;
+      const { hotelId } = req.body; // Assuming hotelId is the ObjectId of the hotel to be added
+  
+      try {
+        // Validate and sanitize hotelData if necessary
+        if (!mongoose.Types.ObjectId.isValid(hotelId)) {
+          return res.status(400).json({ message: 'Invalid hotel ID' });
+        }
+  
+        const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
+  
+        // Add the hotelId to the hotels array of the dayPlan
+        dayPlan.hotels.push(hotelId);
+  
+        await itinerary.save();
+        res.status(201).json({ message: 'Hotel added successfully to day plan', itinerary });
+      } catch (error) {
+        console.error('Error in addHotelToDayPlan:', error);
+        res.status(500).json({ message: error.message });
+      }
+    },
+  
+  
 
   updateHotelInDayPlan: async (req, res) => {
-    const { itineraryId, dayPlanId, itemId } = req.params;
-    const { hotelId, metadata } = req.body; // Destructuring to get hotelId and metadata from the request body
+    const { itineraryId, dayPlanId, hotelId } = req.params; // Assuming hotelId is the existing hotel's ID
+    const { newHotelId } = req.body; // The new hotel ID to replace the old one
   
     try {
-      const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
+      // Retrieve the itinerary with its day plans populated
+      const itinerary = await Itinerary.findById(itineraryId).populate({
+        path: 'dayPlans',
+        match: { _id: dayPlanId }
+      });
   
-      const hotelItem = dayPlan.items.find(item => item._id.toString() === itemId && item.itemType === 'Hotel');
-      if (!hotelItem) {
-        return res.status(404).json({ message: 'Hotel item not found' });
+      // Find the specific day plan
+      const dayPlan = itinerary.dayPlans.find(dp => dp._id.toString() === dayPlanId);
+      if (!dayPlan) {
+        return res.status(404).json({ message: 'Day plan not found' });
       }
   
-      // Update the hotel metadata
-      hotelItem.metadata = { ...hotelItem.metadata, ...metadata };
+      // Update the hotel reference if the newHotelId is valid and different from the current
+      if (newHotelId && mongoose.Types.ObjectId.isValid(newHotelId) && !dayPlan.hotels.includes(newHotelId)) {
+        // Assuming the day plan can have multiple hotels, but we're replacing a specific one
+        const hotelIndex = dayPlan.hotels.findIndex(hotel => hotel.toString() === hotelId);
+        if (hotelIndex !== -1) {
+          dayPlan.hotels[hotelIndex] = newHotelId; // Update the hotel reference
+        } else {
+          return res.status(404).json({ message: 'Hotel not found in day plan' });
+        }
+      } else {
+        // If the newHotelId is not provided, valid, or already present, no update is needed
+        return res.status(400).json({ message: 'Invalid or duplicate new hotel ID' });
+      }
   
-      // Check if a new hotelId (itemId) is provided and validate it
-    //   if (hotelId && mongoose.Types.ObjectId.isValid(hotelId)) {
-        hotelItem.itemId = hotelId; // Update the itemId with the new hotelId
-    //   }
-  
+      // Save the updated itinerary
       await itinerary.save();
       res.status(200).json({ message: 'Hotel updated successfully in day plan', itinerary });
     } catch (error) {
@@ -68,21 +86,24 @@ const ItineraryHotelController = {
   
   
   
+  
 
   // Remove a Hotel from a Day Plan
   removeHotelFromDayPlan: async (req, res) => {
-    const { itineraryId, dayPlanId, itemId } = req.params;
-
+    const { itineraryId, dayPlanId, hotelId } = req.params; // Assuming hotelId is the ObjectId of the hotel to be removed
+  
     try {
       const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
-
-      const itemIndex = dayPlan.items.findIndex(item => item._id.toString() === itemId && item.itemType === 'Hotel');
-      if (itemIndex === -1) {
-        return res.status(404).json({ message: 'Hotel item not found' });
+  
+      // Find the index of the hotelId in the hotels array
+      const hotelIndex = dayPlan.hotels.findIndex(hotel => hotel.toString() === hotelId);
+      if (hotelIndex === -1) {
+        return res.status(404).json({ message: 'Hotel not found in day plan' });
       }
-
-      dayPlan.items.splice(itemIndex, 1);
-
+  
+      // Remove the hotelId from the hotels array
+      dayPlan.hotels.splice(hotelIndex, 1);
+  
       await itinerary.save();
       res.status(200).json({ message: 'Hotel removed successfully from day plan', itinerary });
     } catch (error) {
@@ -90,6 +111,7 @@ const ItineraryHotelController = {
       res.status(500).json({ message: error.message });
     }
   },
+  
 
 }
 

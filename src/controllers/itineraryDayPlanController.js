@@ -257,33 +257,31 @@ const ItineraryController = {
   getItineraryById: async (req, res) => {
     try {
       const itineraryId = req.params.id;
-      let itinerary = await Itinerary.findById(itineraryId);
-
+      // Populate fields in the dayPlans array
+      let itinerary = await Itinerary.findById(itineraryId)
+        .populate('dayPlans.hotels')
+        .populate('dayPlans.transports')
+        .populate('dayPlans.activities')
+        .populate('dayPlans.services')
+        .populate('dayPlans.sightseeing');
+  
       if (!itinerary) {
         return res.status(404).send('Itinerary not found');
       }
-
-      // Convert to a plain object to manipulate
-      itinerary = itinerary.toObject();
-
-      // Sequentially populate each item; consider parallelizing with Promise.all for efficiency
-      for (let dayPlan of itinerary.dayPlans) {
-        for (let item of dayPlan.items) {
-          console.log(item.itemType)
-          // Fetch the detailed document based on itemType and attach it
-          const details = await fetchItemDetails(item.itemType, item.itemId);
-          item.details = details ? details.toObject() : null; // Ensure details are in a manageable format
-        }
-      }
-
+  
+      // Since Mongoose queries return documents that you can modify, there's no need to convert to a plain object for manipulation
+      // Directly working with the populated itinerary object
+  
+      // Mongoose should handle the population of documents based on the schema definitions,
+      // so there's no need for manual population as in the initial code snippet
+  
       res.json(itinerary);
     } catch (error) {
       console.error(error);
       res.status(500).send('Server error occurred while fetching itinerary.');
     }
-
-
   }
+  
 
 
   // Additional methods for fetching, updating, and deleting itineraries can be added here.

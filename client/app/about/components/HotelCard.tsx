@@ -56,7 +56,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
         console.log('Selected hotel:', hotel._id);
         
         // Define the URL for the PATCH request
-        const url = `http://localhost:4000/api/v1/itineraries/itinerary/65cc9d7e36cc1a719d95350b/dayplan/65cc9d7e36cc1a719d95350e/hotel/65ccebf08edcc2e7d565196c`;
+        const url = `http://localhost:4000/api/v1/itineraries/itinerary/65cc9d7e36cc1a719d95350b/dayplan/65cc9d7e36cc1a719d95350e`;
     
         // Create the request body
         const requestBody = {
