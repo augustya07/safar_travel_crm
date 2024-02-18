@@ -16,6 +16,9 @@ interface HotelCardProps {
   roomDetails: string[];
   price: number;
   imageUrl: string;
+  id: string;
+  dayPlanId:string
+  itineraryId:string
 }
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
@@ -46,6 +49,9 @@ const HotelCard: React.FC<HotelCardProps> = ({
   roomDetails,
   price,
   imageUrl,
+  id,
+  dayPlanId,
+  itineraryId
 }) => {
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -56,11 +62,11 @@ const HotelCard: React.FC<HotelCardProps> = ({
         console.log('Selected hotel:', hotel._id);
         
         // Define the URL for the PATCH request
-        const url = `http://localhost:4000/api/v1/itineraries/itinerary/65cc9d7e36cc1a719d95350b/dayplan/65cc9d7e36cc1a719d95350e`;
+        const url = `http://localhost:4000/api/v1/itineraries/${itineraryId}/dayplan/${dayPlanId}/hotel/${id}`;
     
         // Create the request body
         const requestBody = {
-            hotelId: hotel._id
+            newHotelId: hotel._id
         };
     
         try {

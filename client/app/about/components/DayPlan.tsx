@@ -4,7 +4,7 @@ import HotelCard from "./HotelCard"
 
 export default function DayPlan(props:any) {
 
-    const {dayPlanData} = props
+    const {dayPlanData,itineraryId} = props
 
 
     console.log(dayPlanData)
@@ -26,6 +26,10 @@ export default function DayPlan(props:any) {
     roomDetails: ["Amenities: WiFi, Pool"], // Example, adjust based on your logic
     price: hotelDetails.price,
     imageUrl: hotelDetails.imageUrl,
+    id: hotelDetails._id,
+    dayPlanId: dayPlanData._id,
+    itineraryId: itineraryId
+
   };
 
     return (

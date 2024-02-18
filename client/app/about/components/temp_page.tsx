@@ -48,7 +48,7 @@ export default function ItineraryPage() {
       {/* Main content */}
       <main>
         {itinerary?.dayPlans?.map((dayPlan:any, index:any) => (
-          <DayPlan key={index} dayPlanData={dayPlan} />
+          <DayPlan key={index} dayPlanData={dayPlan} itineraryId={itinerary?._id} />
         ))}
       </main>
     </div>
