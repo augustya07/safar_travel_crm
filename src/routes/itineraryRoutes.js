@@ -35,7 +35,7 @@ router.delete('/:itineraryId/dayplan/:dayPlanId/hotel/:hotelId', ItineraryHotelC
 // router.put('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId', ItineraryController.updateHotelInDayPlan);
 
 // Route to add a new day plan
-router.post('/itineraries/:itineraryId/dayPlans', ItineraryController.addDayPlan);
+router.post('/:itineraryId/dayPlan', ItineraryController.addDayPlan);
 
 // Route to remove an existing day plann
 router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId', ItineraryController.removeDayPlan);
