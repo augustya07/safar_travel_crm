@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import HotelCard from "./HotelCard";
-import ChangeHotelPopup from "./ChangeHotelPopup"; // Adjust import path as necessary
+import ChangeHotelPopup from "./ChangeHotelPopup";
+import TransportCard from './TransportCard';
+import TransportPopup from './TransportPopop';
 
 export default function DayPlan({ dayPlanData, itineraryId }) {
     const [showChangeHotelPopup, setShowChangeHotelPopup] = useState(false);
+    const [showChangeTransportPopup, setShowChangeTransportPopup] = useState(false);
     const hotelDetails = dayPlanData?.hotels?.[0];
+    const transportDetails = dayPlanData?.transports?.[0];
 
     const handleSelectHotel = async (hotel) => {
         const apiUrl = `http://localhost:4000/api/v1/itineraries/${itineraryId}/dayplan/${dayPlanData._id}`;
@@ -28,11 +32,33 @@ export default function DayPlan({ dayPlanData, itineraryId }) {
         }
     };
 
+    const handleSelectTransport = async (transport) => {
+        const apiUrl = `http://localhost:4000/api/v1/itineraries/${itineraryId}/dayplan/${dayPlanData._id}/transport`;
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST', // Adjust if necessary based on your API
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ transportId: transport._id }), // Send the selected transport's ID
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update day plan with the selected transport');
+            }
+            // Handle successful update here
+            alert('Transport added successfully to the day plan');
+            setShowChangeTransportPopup(false); // Close the popup
+        } catch (error) {
+            console.error('Error updating day plan with the selected transport:', error);
+            alert(error.message);
+        }
+    };
+
     return (
         <div className="bg-white p-6 rounded-lg shadow-md mb-4">
             <h1 className="text-xl font-bold mb-4">Day Plan: {dayPlanData.title}</h1>
             <p className="text-gray-600 mb-4">{dayPlanData.description}</p>
-            
+
             {hotelDetails ? (
                 <HotelCard
                     location={hotelDetails.location}
@@ -54,10 +80,31 @@ export default function DayPlan({ dayPlanData, itineraryId }) {
                 </button>
             )}
 
+            {transportDetails ? (
+                <TransportCard
+                    type={transportDetails.type}
+                    route={transportDetails.route}
+                    price={transportDetails.price}
+                    frequency={transportDetails.frequency}
+                    dayPlanId={dayPlanData._id}
+                    id={transportDetails._id}
+                    itineraryId={itineraryId}
+                // Pass other props as needed
+                />
+            ) : (
+                <button onClick={() => setShowChangeTransportPopup(true)} className="text-blue-500 hover:text-blue-700">
+                    Add Transport
+                </button>
+            )}
+
+            {showChangeTransportPopup && (
+                <TransportPopup onClose={() => setShowChangeTransportPopup(false)} onSelectTransport={handleSelectTransport} />
+            )}
+
             {showChangeHotelPopup && (
                 <ChangeHotelPopup onClose={() => setShowChangeHotelPopup(false)} onSelectHotel={handleSelectHotel} />
             )}
-            
+
         </div>
     );
 }

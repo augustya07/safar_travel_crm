@@ -1,19 +1,3 @@
-// // models/Transport.js
-
-// import mongoose from 'mongoose';
-
-// const transportSchema = new mongoose.Schema({
-//   type: { type: String, required: true }, // e.g., "Volvo Bus"
-//   rating: { type: Number, required: true },
-//   price: { type: Number, required: true },
-//   originalPrice: Number,
-//   frequency: { type: String, required: true }, // e.g., "1 Bus A Day"
-//   route: { type: String, required: true } // e.g., "Mumbai To Goa"
-// }, { timestamps: true });
-
-// const Transport = mongoose.model('Transport', transportSchema);
-// export default Transport;
-
 
 import mongoose from 'mongoose';
 
@@ -54,13 +38,13 @@ const transportSchema = new mongoose.Schema({
     type: String, 
     required: true, 
     trim: true,
-    validate: {
-      validator: function(v) {
-        // Simple validation for frequency format "Number + Descriptor"
-        return /^\d+\s+\w+\s+(a|per)\s+\w+$/i.test(v);
-      },
-      message: 'Please enter a valid frequency'
-    }
+    // validate: {
+    //   validator: function(v) {
+    //     // Simple validation for frequency format "Number + Descriptor"
+    //     return /^\d+\s+\w+\s+(a|per)\s+\w+$/i.test(v);
+    //   },
+    //   message: 'Please enter a valid frequency'
+    // }
   },
   route: routeSchema, // Use the defined Route subdocument
   isActive: {

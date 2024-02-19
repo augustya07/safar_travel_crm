@@ -40,13 +40,13 @@ router.post('/:itineraryId/dayPlan', ItineraryController.addDayPlan);
 router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId', ItineraryController.removeDayPlan);
 
 // Route to add a transport to a day plan
-router.post('/:itineraryId/dayPlans/:dayPlanId/transports', ItineraryTransportController.addTransportToDayPlan);
+router.post('/:itineraryId/dayPlan/:dayPlanId/transport', ItineraryTransportController.addTransportToDayPlan);
 
 // Route to update a transport in a day plan
-router.patch('/:itineraryId/dayPlans/:dayPlanId/transports/:transportId', ItineraryTransportController.updateTransportInDayPlan);
+router.patch('/:itineraryId/dayPlan/:dayPlanId/transport/:transportId', ItineraryTransportController.updateTransportInDayPlan);
 
 // Route to remove a transport from a day plan
-router.delete('/:itineraryId/dayPlans/:dayPlanId/transports/:transportId', ItineraryTransportController.removeTransportFromDayPlan);
+router.delete('/:itineraryId/dayPlan/:dayPlanId/transport/:transportId', ItineraryTransportController.removeTransportFromDayPlan);
 
 
 

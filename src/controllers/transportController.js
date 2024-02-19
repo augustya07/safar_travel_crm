@@ -73,3 +73,33 @@ export const deleteTransport = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const search = async (req, res) => {
+  const { type, rating, priceMin, priceMax, from, to, isActive } = req.query;
+  let query = {};
+
+  if (type) query.type = type;
+  if (rating) query.rating = { $gte: parseInt(rating, 10) };
+  if (priceMin || priceMax) {
+    query.price = {};
+    if (priceMin) query.price.$gte = parseInt(priceMin, 10);
+    if (priceMax) query.price.$lte = parseInt(priceMax, 10);
+  }
+  if (from || to) {
+    query['route'] = {};
+    if (from) query['route'].from = new RegExp(from, 'i'); // Case insensitive search
+    if (to) query['route'].to = new RegExp(to, 'i');
+  }
+  if (isActive) query.isActive = isActive === 'true';
+
+  try {
+    const transports = await Transport.find(query);
+    res.status(200).json({
+      success: true,
+      count: transports.length,
+      data: transports
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
