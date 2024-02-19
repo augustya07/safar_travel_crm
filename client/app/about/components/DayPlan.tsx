@@ -57,6 +57,7 @@ export default function DayPlan({ dayPlanData, itineraryId }) {
             {showChangeHotelPopup && (
                 <ChangeHotelPopup onClose={() => setShowChangeHotelPopup(false)} onSelectHotel={handleSelectHotel} />
             )}
+            
         </div>
     );
 }

@@ -31,8 +31,7 @@ router.patch('/:itineraryId/dayplan/:dayPlanId/hotel/:hotelId', ItineraryHotelCo
 // Route for removing a hotel from a day plan
 router.delete('/:itineraryId/dayplan/:dayPlanId/hotel/:hotelId', ItineraryHotelController.removeHotelFromDayPlan);
 // Route to update transport in a specific day plan of an itinerary
-// Assuming URLs like /itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId
-// router.put('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId', ItineraryController.updateHotelInDayPlan);
+
 
 // Route to add a new day plan
 router.post('/:itineraryId/dayPlan', ItineraryController.addDayPlan);
@@ -40,21 +39,16 @@ router.post('/:itineraryId/dayPlan', ItineraryController.addDayPlan);
 // Route to remove an existing day plann
 router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId', ItineraryController.removeDayPlan);
 
-// Add Transport to a Day Plan
-router.post('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports', ItineraryTransportController.addTransportToDayPlan);
+// Route to add a transport to a day plan
+router.post('/:itineraryId/dayPlans/:dayPlanId/transports', ItineraryTransportController.addTransportToDayPlan);
 
-// Update Transport in a Day Plan
-router.patch('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId', ItineraryTransportController.updateTransportInDayPlan);
+// Route to update a transport in a day plan
+router.patch('/:itineraryId/dayPlans/:dayPlanId/transports/:transportId', ItineraryTransportController.updateTransportInDayPlan);
 
-// Remove Transport from a Day Plan
-router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId/transports/:itemId', ItineraryTransportController.removeTransportFromDayPlan);
-
-
+// Route to remove a transport from a day plan
+router.delete('/:itineraryId/dayPlans/:dayPlanId/transports/:transportId', ItineraryTransportController.removeTransportFromDayPlan);
 
 
 
-// router.patch('/itineraries/:itineraryId/dayPlans/:dayPlanId', ItineraryController.);
-
-// Additional routes for fetching, updating, and deleting itineraries can be added here
 
 export default router;

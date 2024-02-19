@@ -1,87 +1,5 @@
-// import Itinerary from '../models/Itinerary.js';
-
-// async function addTransport(req, res) {
-//     const { itineraryId ,dayPlanId} = req.params;
-//     const {transportDetails } = req.body;
-  
-//     if (!dayPlanId || !transportDetails || !transportDetails.type) {
-//       return res.status(400).send('Missing transport details');
-//     }
-  
-//     try {
-//       const updateResult = await Itinerary.updateOne(
-//         { _id: itineraryId, "dayPlans._id": dayPlanId },
-//         { $push: { "dayPlans.$.items": { itemType: 'Transport', ...transportDetails } } }
-//       );
-  
-//       if (updateResult.modifiedCount === 0) {
-//         return res.status(404).send('Itinerary or Day Plan not found');
-//       }
-  
-//       res.status(201).send({ message: 'Transport added successfully' });
-//     } catch (error) {
-//       res.status(500).send(error.message);
-//     }
-//   }
-  
-//   async function updateTransport(req, res) {
-//     const { itineraryId, transportId } = req.params;
-//     const transportUpdates = req.body;
-  
-//     // Example validation: Ensure no disallowed fields are being updated
-//     const allowedUpdates = ['bookingStatus', 'dates', 'notes'];
-//     const isUpdateAllowed = Object.keys(transportUpdates).every(field => allowedUpdates.includes(field));
-  
-//     if (!isUpdateAllowed) {
-//       return res.status(400).send('Invalid update operation');
-//     }
-  
-//     try {
-//       const updateResult = await Itinerary.updateOne(
-//         { "dayPlans.items._id": transportId },
-//         { $set: { "dayPlans.$[dp].items.$[it].metadata": transportUpdates } },
-//         { 
-//           arrayFilters: [
-//             { "dp.items._id": transportId },
-//             { "it._id": transportId }
-//           ]
-//         }
-//       );
-  
-//       if (updateResult.modifiedCount === 0) {
-//         return res.status(404).send('Transport not found');
-//       }
-  
-//       res.status(200).send({ message: 'Transport updated successfully' });
-//     } catch (error) {
-//       res.status(500).send(error.message);
-//     }
-//   }
-  
-//   async function deleteTransport(req, res) {
-//     const { itineraryId, transportId } = req.params;
-  
-//     try {
-//       const updateResult = await Itinerary.updateOne(
-//         { "dayPlans.items._id": transportId },
-//         { $pull: { "dayPlans.$.items": { _id: transportId } } }
-//       );
-  
-//       if (updateResult.modifiedCount === 0) {
-//         return res.status(404).send('Transport not found');
-//       }
-  
-//       res.status(204).send();
-//     } catch (error) {
-//       res.status(500).send(error.message);
-//     }
-//   }
-  
-
-//   export {addTransport,updateTransport,deleteTransport}
-
 import Itinerary from '../models/Itinerary.js';
-import mongoose from 'mongoose';
+import { mongoose } from 'mongoose';
 
 // Helper function to find itinerary and day plan
 async function findItineraryAndDayPlan(itineraryId, dayPlanId) {
@@ -102,19 +20,17 @@ const ItineraryTransportController = {
   // Add a Transport to a Day Plan
   addTransportToDayPlan: async (req, res) => {
     const { itineraryId, dayPlanId } = req.params;
-    const transportDetails = req.body; // This should be validated and sanitized
-
-    if (!transportDetails || !transportDetails.itemType) {
-      return res.status(400).send('Missing transport details');
-    }
+    const { transportId } = req.body; // Assuming transportId is the ObjectId of the transport to be added
 
     try {
+      if (!mongoose.Types.ObjectId.isValid(transportId)) {
+        return res.status(400).json({ message: 'Invalid transport ID' });
+      }
+
       const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
 
-      dayPlan.items.push({
-        itemType: 'Transport',
-        ...transportDetails
-      });
+      // Add the transportId to the transports array of the dayPlan
+      dayPlan.transports.push(transportId);
 
       await itinerary.save();
       res.status(201).json({ message: 'Transport added successfully to day plan', itinerary });
@@ -126,19 +42,23 @@ const ItineraryTransportController = {
 
   // Update a Transport in a Day Plan
   updateTransportInDayPlan: async (req, res) => {
-    const { itineraryId, dayPlanId, itemId } = req.params;
-    const transportUpdates = req.body; // This should be validated and sanitized
+    const { itineraryId, dayPlanId, transportId } = req.params; // Assuming transportId is the existing transport's ID
+    const { newTransportId } = req.body; // The new transport ID to replace the old one
 
     try {
-      const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
-
-      const transportItem = dayPlan.items.find(item => item._id.toString() === itemId && item.itemType === 'Transport');
-      if (!transportItem) {
-        return res.status(404).json({ message: 'Transport item not found' });
+      if (!mongoose.Types.ObjectId.isValid(newTransportId) || transportId === newTransportId) {
+        return res.status(400).json({ message: 'Invalid or same new transport ID' });
       }
 
-      // Assuming direct assignment is safe for the update fields
-      Object.assign(transportItem, transportUpdates);
+      const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
+
+      const transportIndex = dayPlan.transports.findIndex(trans => trans.toString() === transportId);
+      if (transportIndex === -1) {
+        return res.status(404).json({ message: 'Transport not found in day plan' });
+      }
+
+      // Update the transport reference
+      dayPlan.transports[transportIndex] = newTransportId;
 
       await itinerary.save();
       res.status(200).json({ message: 'Transport updated successfully in day plan', itinerary });
@@ -150,17 +70,18 @@ const ItineraryTransportController = {
 
   // Remove a Transport from a Day Plan
   removeTransportFromDayPlan: async (req, res) => {
-    const { itineraryId, dayPlanId, itemId } = req.params;
+    const { itineraryId, dayPlanId, transportId } = req.params;
 
     try {
       const { itinerary, dayPlan } = await findItineraryAndDayPlan(itineraryId, dayPlanId);
 
-      const itemIndex = dayPlan.items.findIndex(item => item._id.toString() === itemId && item.itemType === 'Transport');
-      if (itemIndex === -1) {
-        return res.status(404).json({ message: 'Transport item not found' });
+      const transportIndex = dayPlan.transports.findIndex(trans => trans.toString() === transportId);
+      if (transportIndex === -1) {
+        return res.status(404).json({ message: 'Transport not found in day plan' });
       }
 
-      dayPlan.items.splice(itemIndex, 1);
+      // Remove the transportId from the transports array
+      dayPlan.transports.splice(transportIndex, 1);
 
       await itinerary.save();
       res.status(200).json({ message: 'Transport removed successfully from day plan', itinerary });
