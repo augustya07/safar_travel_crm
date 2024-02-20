@@ -1,20 +1,3 @@
-// // models/Activity.js
-
-// import mongoose from 'mongoose';
-
-// const activitySchema = new mongoose.Schema({
-//   name: { type: String, required: true },
-//   type: { type: String, required: true }, // e.g., "Trekking", "Kayaking"
-//   rating: { type: Number, required: true },
-//   price: { type: Number, required: true },
-//   originalPrice: Number,
-//   deal: String,
-//   location: { type: String, required: true }
-// }, { timestamps: true });
-
-// const Activity = mongoose.model('Activity', activitySchema);
-// export default Activity;
-
 
 import mongoose from 'mongoose';
 
@@ -30,16 +13,7 @@ const activitySchema = new mongoose.Schema({
     trim: true,
     enum: ['Trekking', 'Kayaking', 'City Tour', 'Museum Visit', 'Snorkeling'] // Example activity types
   },
-  rating: { 
-    type: Number, 
-    required: true, 
-    min: 0, 
-    max: 5,
-    validate: {
-      validator: Number.isInteger,
-      message: '{VALUE} is not an integer value'
-    }
-  },
+
   price: { 
     type: Number, 
     required: true, 

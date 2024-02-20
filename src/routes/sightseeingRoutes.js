@@ -3,6 +3,8 @@ import { sightseeingController } from '../controllers/sightseeingController.js';
 
 const router = express.Router();
 
+router.get('/search', sightseeingController.searchSightseeing)
+
 router.post('/', sightseeingController.addSightseeing);
 router.get('/', sightseeingController.getSightseeings);
 router.get('/:id', sightseeingController.getSightseeingById);

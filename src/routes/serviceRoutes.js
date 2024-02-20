@@ -3,11 +3,13 @@
 import express from 'express';
 import * as serviceController from '../controllers/serviceController.js';
 
-const router = express.Router();
+const router = express.Router()
+
+router.get('/search', serviceController.search);
 
 router.get('/', serviceController.getAllServices);
 router.get('/:id', serviceController.getServiceById);
-router.post('/', serviceController.createService); // Handles both single and multiple services
+router.post('/', serviceController.createService); 
 router.put('/:id', serviceController.updateService);
 router.delete('/:id', serviceController.deleteService);
 

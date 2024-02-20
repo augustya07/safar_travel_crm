@@ -73,3 +73,42 @@ export const deleteActivity = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const searchActivities = async (req, res) => {
+  try {
+    const { name, type, minPrice, maxPrice, location, isActive } = req.query;
+
+    // Build the query object based on provided search criteria
+    let query = {};
+
+    if (name) {
+      query.name = { $regex: new RegExp(name, 'i') }; // Case-insensitive search
+    }
+
+    if (type) {
+      query.type = type;
+    }
+
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      query.price = { $gte: minPrice, $lte: maxPrice };
+    } else if (minPrice !== undefined) {
+      query.price = { $gte: minPrice };
+    } else if (maxPrice !== undefined) {
+      query.price = { $lte: maxPrice };
+    }
+
+    if (location) {
+      query.location = { $regex: new RegExp(location, 'i') }; // Case-insensitive search
+    }
+
+    if (isActive) {
+      query.isActive = isActive === 'true'; // Convert query parameter to boolean
+    }
+
+    const activities = await Activity.find(query);
+    res.json(activities);
+  } catch (error) {
+    res.status(500).send(`Server error: ${error.message}`);
+  }
+};
