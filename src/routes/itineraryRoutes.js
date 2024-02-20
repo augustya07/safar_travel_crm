@@ -51,17 +51,17 @@ router.patch('/:itineraryId/dayPlan/:dayPlanId/transport/:transportId', Itinerar
 // Route to remove a transport from a day plan
 router.delete('/:itineraryId/dayPlan/:dayPlanId/transport/:transportId', ItineraryTransportController.removeTransportFromDayPlan);
 
-router.post('/:itineraryId/dayPlan/:dayPlanId/services',ItineraryServiceController.addServiceToDayPlan);
-router.patch('/:itineraryId/dayPlan/:dayPlanId/services/:serviceId', ItineraryServiceController.updateServiceInDayPlan);
-router.delete('/:itineraryId/dayPlan/:dayPlanId/services/:serviceId', ItineraryServiceController.removeServiceFromDayPlan)
+router.post('/:itineraryId/dayPlan/:dayPlanId/service',ItineraryServiceController.addServiceToDayPlan);
+router.patch('/:itineraryId/dayPlan/:dayPlanId/service/:serviceId', ItineraryServiceController.updateServiceInDayPlan);
+router.delete('/:itineraryId/dayPlan/:dayPlanId/service/:serviceId', ItineraryServiceController.removeServiceFromDayPlan)
 
 router.post('/:itineraryId/dayPlan/:dayPlanId/sightseeing', ItinerarySightseeingController.addSightseeingToDayPlan);
 router.patch('/:itineraryId/dayPlan/:dayPlanId/sightseeing/:sightseeingId',ItinerarySightseeingController.updateSightseeingInDayPlan);
 router.delete('/:itineraryId/dayPlan/:dayPlanId/sightseeing/:sightseeingId',ItinerarySightseeingController.removeSightseeingFromDayPlan);
 
-router.post('/:itineraryId/dayPlan/:dayPlanId/activities', ItineraryActivityController.addActivityToDayPlan);
-router.patch('/:itineraryId/dayPlan/:dayPlanId/activities/:activityId', ItineraryActivityController.updateActivityInDayPlan);
-router.delete('/:itineraryId/dayPlan/:dayPlanId/activities/:activityId', ItineraryActivityController.removeActivityFromDayPlan);
+router.post('/:itineraryId/dayPlan/:dayPlanId/activity', ItineraryActivityController.addActivityToDayPlan);
+router.patch('/:itineraryId/dayPlan/:dayPlanId/activity/:activityId', ItineraryActivityController.updateActivityInDayPlan);
+router.delete('/:itineraryId/dayPlan/:dayPlanId/activity/:activityId', ItineraryActivityController.removeActivityFromDayPlan);
 
 
 

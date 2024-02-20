@@ -19,9 +19,9 @@ interface ChangeActivityPopupProps {
 const searchSchema = z.object({
     name: z.string().optional(),
     location: z.string().optional(),
-    minPrice: z.number().optional(),
-    maxPrice: z.number().optional(),
-    isActive: z.union([z.literal('true'), z.literal('false')]).optional(),
+    // minPrice: z.number().optional(),
+    // maxPrice: z.number().optional(),
+    // isActive: z.union([z.literal('true'), z.literal('false')]).optional(),
 });
 
 type SearchFormInputs = z.infer<typeof searchSchema>;
@@ -79,7 +79,7 @@ const ActivityPopup: React.FC<ChangeActivityPopupProps> = ({ onClose, onSelectAc
                         className="border p-2 rounded-lg w-full mb-2 text-black"
                         type="text"
                     />
-                    <input
+                    {/* <input
                         {...register('minPrice', { valueAsNumber: true })}
                         placeholder="Minimum Price"
                         className="border p-2 rounded-lg w-full mb-2 text-black"
@@ -90,15 +90,15 @@ const ActivityPopup: React.FC<ChangeActivityPopupProps> = ({ onClose, onSelectAc
                         placeholder="Maximum Price"
                         className="border p-2 rounded-lg w-full mb-2 text-black"
                         type="number"
-                    />
-                    <select
+                    /> */}
+                    {/* <select
                         {...register('isActive')}
                         className="border p-2 rounded-lg w-full mb-2 text-black"
                     >
                         <option value="">Is Active?</option>
                         <option value="true">Active</option>
                         <option value="false">Inactive</option>
-                    </select>
+                    </select> */}
                     {Object.keys(errors).map((errorKey) => (
                         errors[errorKey] && <p key={errorKey} className="text-red-500">{errors[errorKey].message}</p>
                     ))}

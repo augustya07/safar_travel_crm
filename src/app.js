@@ -49,7 +49,7 @@ const connectToDatabase = async () => {
   connectToDatabase();
 
 app.use('/api/v1/hotels', hotelRoutes);
-app.use('/api/v1/activity', activityRoutes);
+app.use('/api/v1/activities', activityRoutes);
 app.use('/api/v1/transports', transportRoute);
 app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/itineraries', itineraryRoutes);

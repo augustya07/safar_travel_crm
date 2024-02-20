@@ -70,7 +70,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             Change Service
           </button>
         </div>
-        <p className="text-sm text-gray-500">{`${duration.value} ${duration.unit}${duration.value > 1 ? 's' : ''}`}</p>
+        {/* <p className="text-sm text-gray-500">{`${duration.value} ${duration.unit}${duration.value > 1 ? 's' : ''}`}</p> */}
         <div className="mt-2">
           <div className="font-bold">₹{price.toLocaleString()}</div>
           {originalPrice && originalPrice > price && (

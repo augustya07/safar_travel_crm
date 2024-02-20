@@ -30,7 +30,7 @@ const SightseeingCard: React.FC<SightseeingCardProps> = ({
 
     // Create the request body
     const requestBody = {
-        newSightseeingId: sightseeing._id
+      newSightseeingId: sightseeing._id
     };
 
     try {
