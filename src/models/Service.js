@@ -1,20 +1,3 @@
-// // models/Service.js
-
-// import mongoose from 'mongoose';
-
-// const serviceSchema = new mongoose.Schema({
-//   name: { type: String, required: true },
-//   rating: { type: Number, required: true },
-//   price: { type: Number, required: true },
-//   originalPrice: Number,
-//   duration: String, // e.g., "1 Night", "Per Couple"
-//   location: { type: String, required: true },
-//   // Add any other relevant fields here
-// }, { timestamps: true });
-
-// const Service = mongoose.model('Service', serviceSchema);
-// export default Service;
-
 
 import mongoose from 'mongoose';
 
@@ -38,16 +21,7 @@ const serviceSchema = new mongoose.Schema({
     required: true, 
     trim: true 
   },
-  rating: { 
-    type: Number, 
-    required: true, 
-    min: 0, 
-    max: 5,
-    validate: {
-      validator: Number.isInteger,
-      message: '{VALUE} is not an integer value'
-    }
-  },
+
   price: { 
     type: Number, 
     required: true, 

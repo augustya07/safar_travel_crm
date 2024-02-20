@@ -1,5 +1,3 @@
-// controllers/serviceController.js
-
 import Service from '../models/Service.js';
 
 // Get all services from the database
@@ -73,3 +71,32 @@ export const deleteService = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const search = async (req, res) => {
+  try {
+    const { name, location, minPrice, maxPrice, isActive } = req.query;
+
+    // Build the query object based on provided search criteria
+    let query = {};
+    if (name) {
+      query.name = new RegExp(name, 'i'); 
+    }
+    if (location) {
+      query.location = new RegExp(location, 'i'); 
+    }
+    if (minPrice) {
+      query.price = { $gte: minPrice };
+    }
+    if (maxPrice) {
+      query.price = { ...query.price, $lte: maxPrice };
+    }
+    if (isActive) {
+      query.isActive = isActive === 'true'; 
+    }
+
+    const services = await Service.find(query);
+    res.json(services);
+  } catch (error) {
+    res.status(500).send(error.toString());
+  }
+}

@@ -55,9 +55,6 @@ const TransportCard: React.FC<TransportCardProps> = ({
         const data = await response.json();
         console.log('Update success:', data);
 
-
-
-
     } catch (error) {
         console.error('Failed to update the hotel:', error);
         // Handle errors here, such as by showing an error message to the user
