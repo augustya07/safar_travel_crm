@@ -4,7 +4,8 @@ import { mongoose } from 'mongoose';
 
 const ItineraryActivityController = {
     addActivityToDayPlan: async (req, res) => {
-        const { itineraryId, dayPlanId, activityId } = req.params;
+        const { itineraryId, dayPlanId } = req.params;
+        const {activityId} = req.body;
       
         try {
           const itinerary = await Itinerary.findById(itineraryId);
@@ -23,7 +24,8 @@ const ItineraryActivityController = {
     },
 
     updateActivityInDayPlan: async (req, res) => {
-        const { itineraryId, dayPlanId, oldActivityId, newActivityId } = req.body;
+        const { itineraryId, dayPlanId, oldActivityId } = req.params;
+        const {newActivityId} = req.body
       
         try {
           const itinerary = await Itinerary.findById(itineraryId);

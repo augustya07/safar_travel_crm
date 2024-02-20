@@ -3,7 +3,8 @@ import { mongoose } from 'mongoose';
 
 const ItinerarySightseeingController = {
     addSightseeingToDayPlan: async (req, res) => {
-        const { itineraryId, dayPlanId, sightseeingId } = req.params;
+        const { itineraryId, dayPlanId } = req.params;
+        const {sightseeingId} = req.body
       
         try {
           const itinerary = await Itinerary.findById(itineraryId);
@@ -21,7 +22,8 @@ const ItinerarySightseeingController = {
       },
 
       updateSightseeingInDayPlan: async (req, res) => {
-        const { itineraryId, dayPlanId, oldSightseeingId, newSightseeingId } = req.body;
+        const { itineraryId, dayPlanId, sightseeingId } = req.params;
+        const {newSightseeingId} = req.body
       
         try {
           const itinerary = await Itinerary.findById(itineraryId);
@@ -30,7 +32,7 @@ const ItinerarySightseeingController = {
             return res.status(404).send('Day plan not found');
           }
       
-          const sightseeingIndex = dayPlan.sightseeing.indexOf(oldSightseeingId);
+          const sightseeingIndex = dayPlan.sightseeing.indexOf(sightseeingId);
           if (sightseeingIndex !== -1) {
             dayPlan.sightseeing[sightseeingIndex] = newSightseeingId; // Replace the old sightseeing ID with the new one
             await itinerary.save();

@@ -4,7 +4,8 @@ import { mongoose } from 'mongoose';
 
 const ItineraryServiceController = {
     addServiceToDayPlan: async (req, res)  => {
-        const { itineraryId, dayPlanId, serviceId } = req.params;
+        const { itineraryId, dayPlanId } = req.params;
+        const {serviceId} = req.body;
       
         try {
           // Find the itinerary and update it
@@ -23,7 +24,8 @@ const ItineraryServiceController = {
       },
 
       updateServiceInDayPlan: async (req, res) => {
-        const { itineraryId, dayPlanId, oldServiceId, newServiceId } = req.body;
+        const { itineraryId, dayPlanId, serviceId } = req.params;
+        const {newServiceId} = req.body
       
         try {
           const itinerary = await Itinerary.findById(itineraryId);
@@ -32,7 +34,7 @@ const ItineraryServiceController = {
             return res.status(404).send('Day plan not found');
           }
       
-          const serviceIndex = dayPlan.services.indexOf(oldServiceId);
+          const serviceIndex = dayPlan.services.indexOf(serviceId);
           if (serviceIndex !== -1) {
             dayPlan.services[serviceIndex] = newServiceId; // Replace the old service ID with the new one
             await itinerary.save();
