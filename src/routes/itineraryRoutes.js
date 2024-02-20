@@ -5,6 +5,7 @@ import ItineraryHotelController from "../controllers/itineraryHotelController.js
 
 import ItineraryTransportController from '../controllers/inineraryTransportController.js'; // Adjust the path as necessary
 import ItineraryServiceController from '../controllers/itineraryServiceController.js';
+import ItinerarySightseeingController from '../controllers/itinerarySightseeingController.js';
 
 
 const router = express.Router();
@@ -52,6 +53,11 @@ router.delete('/:itineraryId/dayPlan/:dayPlanId/transport/:transportId', Itinera
 router.post('/itineraries/:itineraryId/dayPlans/:dayPlanId/services/:serviceId',ItineraryServiceController.addServiceToDayPlan);
 router.patch('/itineraries/dayPlans/services', ItineraryServiceController.updateServiceInDayPlan);
 router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId/services/:serviceId', ItineraryServiceController.removeServiceFromDayPlan)
+
+router.post('/itineraries/:itineraryId/dayPlans/:dayPlanId/sightseeing/:sightseeingId', ItinerarySightseeingController.addSightseeingToDayPlan);
+router.patch('/itineraries/dayPlans/sightseeing',ItinerarySightseeingController.updateSightseeingInDayPlan);
+router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId/sightseeing/:sightseeingId',ItinerarySightseeingController.removeSightseeingFromDayPlan);
+
 
 
 
