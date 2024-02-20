@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TransportPopup from './TransportPopop';
+import TransportPopup from './TransportPopup';
 interface TransportCardProps {
   type: string;
   route: {

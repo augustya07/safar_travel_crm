@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import HotelCard from "./HotelCard";
 import ChangeHotelPopup from "./ChangeHotelPopup";
 import TransportCard from './TransportCard';
-import TransportPopup from './TransportPopop';
+import TransportPopup from './TransportPopup';
 
 export default function DayPlan({ dayPlanData, itineraryId }) {
     const [showChangeHotelPopup, setShowChangeHotelPopup] = useState(false);
