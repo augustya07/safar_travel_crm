@@ -20,9 +20,10 @@ const fetchItineraryData = async () => {
 };
 
 export default function ItineraryPage() {
-  const [itinerary, setItinerary] = useState(null);
+  // const [itinerary, setItinerary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [itinerary,setItinerary] = useState([])
 
   const loadItinerary = async () => {
     setLoading(true);

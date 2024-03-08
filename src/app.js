@@ -8,6 +8,7 @@ import transportRoute from './routes/transportRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import itineraryRoutes from './routes/itineraryRoutes.js';
 import sightseeingRoutes from './routes/sightseeingRoutes.js'
+import leadRoutes from './routes/leadRoutes.js'
 
 
 import mongoose from 'mongoose';
@@ -54,6 +55,7 @@ app.use('/api/v1/transports', transportRoute);
 app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/itineraries', itineraryRoutes);
 app.use('/api/v1/sightseeing', sightseeingRoutes)
+app.use('/api/v1/lead', leadRoutes)
 
 
 
