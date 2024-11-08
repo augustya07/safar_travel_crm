@@ -1,0 +1,34 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main  # or your default branch name
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # This specifies to use your self-hosted runner
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'  # Adjust this to match your Node.js version
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Create .env file
+        run: |
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          # Add any other environment variables you need
+          
+      - name: Start/Restart Application
+        run: |
+          pm2 delete all || true
+          pm2 start server.js --name backend
+          pm2 save
