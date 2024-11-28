@@ -29,6 +29,6 @@ jobs:
           
       - name: Start/Restart Application
         run: |
-        npm i 
-        pm2 delete all
-        pm2 start server.js
+          npm i 
+          pm2 delete all
+          pm2 start server.js
