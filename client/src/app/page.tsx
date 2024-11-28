@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { API_URL } from "@/constants/API_URL";
 
 export default async function Home() {
