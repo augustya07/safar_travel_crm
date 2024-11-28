@@ -2,8 +2,14 @@ import { API_URL } from "@/constants/API_URL";
 import DayPlan from "../DayPlan";
 import { DayPlan as DayPlanType } from '@/types/itinerary';
 
+interface PageProps {
+    params: {
+      id: string;
+    };
+    searchParams: { [key: string]: string | string[] | undefined };
+  }
 
-export default async function CustomizeTrip({ params }: { params: { id: string } }) {
+export default async function CustomizeTrip({ params }: PageProps) {
     const response = await fetch(`${API_URL}/api/v1/itineraries/${params.id}`, {
       cache: 'no-store'  // or 'force-cache' if you want to cache the result
     });
