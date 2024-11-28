@@ -1,5 +1,19 @@
 import { API_URL } from "@/constants/API_URL";
 
+interface Activity {
+  _id: string;
+  name: string;
+  type: string;
+  price: number;
+  originalPrice?: number;
+  deal: string;
+  location: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 export default async function Home() {
   const response = await fetch(`${API_URL}/api/v1/activities`);
   const activities = await response.json();
@@ -9,7 +23,7 @@ export default async function Home() {
       <h1 className="text-3xl font-bold mb-8">Available Activities</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {activities.map((activity: any) => (
+        {activities.map((activity: Activity) => (
           <div 
             key={activity._id} 
             className="border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
