@@ -35,7 +35,7 @@ const connectToDatabase = async () => {
       const password = encodeURIComponent(process.env.DB_PASSWORD);
       const dbname = process.env.DB_NAME;
       
-      const connectionString = `mongodb+srv://${username}:${password}@safar.gi753b9.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+      const connectionString = `mongodb+srv://austy:GklyiUeVieeLPHn6@safar.gi753b9.mongodb.net/safar?retryWrites=true&w=majority`;
   
       await mongoose.connect(connectionString, { 
         useNewUrlParser: true, 
