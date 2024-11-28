@@ -29,6 +29,17 @@ const hotelSchema = new mongoose.Schema({
       message: '{VALUE} is not an integer value'
     }
   },
+  contactNumber: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  typeOfStay: {
+    type: String,
+    required: true,
+    enum: ['Hotel', 'Resort', 'Camping', 'Stay'],
+    trim: true
+  },
   price: { 
     type: Number, 
     required: true, 
@@ -76,6 +87,11 @@ const hotelSchema = new mongoose.Schema({
     enum: ['Breakfast', 'Half Board', 'Full Board', 'All Inclusive', 'No Meals'],
   },
   roomInfo: roomSchema,
+  address: { 
+    type: String,
+    required: true,
+    trim: true
+  },
 
 }, { timestamps: true });
 

@@ -1,4 +1,3 @@
-// pages/index.js or pages/[itinerary].js
 "use client";
 
 import React, { useEffect, useState } from 'react';
