@@ -1,4 +1,3 @@
-import { fetchHotels } from '@/lib/data'; // Create this utility function to fetch hotels
 import { Hotel } from '@/types/itinerary';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -18,8 +17,15 @@ export default function ChangeHotelForm({
     currentHotelId,
     hotels 
   }: ChangeHotelFormProps) {
+
+    async function handleUpdateHotel(formData: FormData) {
+        const result = await updateHotel(formData);
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+      }
     return (
-      <form action={updateHotel} className="space-y-4">
+      <form action={handleUpdateHotel} className="space-y-4">
         <input type="hidden" name="itineraryId" value={itineraryId} />
         <input type="hidden" name="dayPlanId" value={dayPlanId} />
   
