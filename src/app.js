@@ -13,7 +13,7 @@ import leadRoutes from './routes/leadRoutes.js'
 
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
+import morgan from 'morgan';
 
 dotenv.config();
 
@@ -22,6 +22,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
+app.use(morgan('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

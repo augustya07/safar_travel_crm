@@ -15,7 +15,7 @@ interface Activity {
 }
 
 export default async function Home() {
-  const response = await fetch(`${API_URL}/api/v1/activities`);
+  const response = await fetch(`${API_URL}/activities`);
   const activities = await response.json();
 
   return (

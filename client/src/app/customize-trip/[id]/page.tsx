@@ -10,7 +10,7 @@ export default async function CustomizeTrip({
   }) {
     const { id } = await params;
     
-    const response = await fetch(`${API_URL}/api/v1/itineraries/${id}`, {
+    const response = await fetch(`${API_URL}/itineraries/${id}`, {
       cache: 'no-store'
     });
     
