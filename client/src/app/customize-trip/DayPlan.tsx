@@ -1,5 +1,6 @@
 import { DayPlan as DayPlanType } from '@/types/itinerary';
 import HotelCard from './HotelCard';
+import { fetchHotels } from '@/lib/data';
 
 interface DayPlanProps {
   dayPlan: DayPlanType;
@@ -8,7 +9,9 @@ interface DayPlanProps {
 
 }
 
-export default function DayPlan({ dayPlan, dayNumber, itineraryId }: DayPlanProps) {
+export default async function DayPlan({ dayPlan, dayNumber, itineraryId }: DayPlanProps) {
+    const hotels = await fetchHotels();
+
   return (
     <div className="border rounded-lg p-6 mb-6 shadow-sm">
       <div className="flex justify-between items-center mb-4">
@@ -29,6 +32,7 @@ export default function DayPlan({ dayPlan, dayNumber, itineraryId }: DayPlanProp
                 hotel={hotel}
                 dayPlanId={dayPlan._id}
                 itineraryId={itineraryId}
+                hotels={hotels}
               />
             ))}
           </div>

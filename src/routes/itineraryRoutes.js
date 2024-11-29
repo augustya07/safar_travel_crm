@@ -3,7 +3,7 @@ import ItineraryController from '../controllers/itineraryDayPlanController.js';
 
 import ItineraryHotelController from "../controllers/itineraryHotelController.js"
 
-import ItineraryTransportController from '../controllers/inineraryTransportController.js'; // Adjust the path as necessary
+import ItineraryTransportController from '../controllers/inineraryTransportController.js'; 
 import ItineraryServiceController from '../controllers/itineraryServiceController.js';
 import ItinerarySightseeingController from '../controllers/itinerarySightseeingController.js';
 import ItineraryActivityController from '../controllers/itineraryActivityController.js';
@@ -12,13 +12,12 @@ import ItineraryActivityController from '../controllers/itineraryActivityControl
 const router = express.Router();
 
 
-router.get('/search-itineraries', ItineraryController.searchItineraries);
 
 
 // Route to create a new itinerary
+router.get('/search-itineraries', ItineraryController.searchItineraries);
 router.post('/', ItineraryController.createItinerary);
-
-router.get('/:id',ItineraryController.getItineraryById)
+router.get('/:id', ItineraryController.getItineraryById);
 
 // Route to update a hotel in a specific day plan of an itinerary
 // Assuming URLs like /itineraries/:itineraryId/dayPlans/:dayPlanId/hotels/:itemId
@@ -26,21 +25,15 @@ router.get('/:id',ItineraryController.getItineraryById)
 
 
 // Route for adding a hotel to a day plan
-router.post('/:itineraryId/dayplan/:dayPlanId', ItineraryHotelController.addHotelToDayPlan);
-
-// Route for updating a hotel in a day plan
-router.patch('/:itineraryId/dayplan/:dayPlanId/hotel/:hotelId', ItineraryHotelController.updateHotelInDayPlan);
-
-// Route for removing a hotel from a day plan
-router.delete('/:itineraryId/dayplan/:dayPlanId/hotel/:hotelId', ItineraryHotelController.removeHotelFromDayPlan);
+router.post('/:itineraryId/dayPlan/:dayPlanId/hotel', ItineraryHotelController.addHotelToDayPlan);
+router.patch('/:itineraryId/dayPlan/:dayPlanId/hotel/:hotelId', ItineraryHotelController.updateHotelInDayPlan);
+router.delete('/:itineraryId/dayPlan/:dayPlanId/hotel/:hotelId', ItineraryHotelController.removeHotelFromDayPlan);
 // Route to update transport in a specific day plan of an itinerary
 
 
 // Route to add a new day plan
 router.post('/:itineraryId/dayPlan', ItineraryController.addDayPlan);
-
-// Route to remove an existing day plann
-router.delete('/itineraries/:itineraryId/dayPlans/:dayPlanId', ItineraryController.removeDayPlan);
+router.delete('/:itineraryId/dayPlan/:dayPlanId', ItineraryController.removeDayPlan); ;
 
 // Route to add a transport to a day plan
 router.post('/:itineraryId/dayPlan/:dayPlanId/transport', ItineraryTransportController.addTransportToDayPlan);

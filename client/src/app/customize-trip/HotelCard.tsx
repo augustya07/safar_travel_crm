@@ -1,13 +1,15 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Hotel } from '@/types/itinerary';
+import React, { useState } from "react";
+import Image from "next/image";
+import { Hotel } from "@/types/itinerary";
+import ChangeHotelButton from "./ChangeHotelButton";
 
 interface HotelCardProps {
   hotel: Hotel;
   dayPlanId: string;
   itineraryId: string;
+  hotels: Hotel[];
 }
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
@@ -16,7 +18,9 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
       {[...Array(5)].map((_, i) => (
         <svg
           key={i}
-          className={`h-5 w-5 ${i < rating ? 'text-yellow-500' : 'text-gray-400'}`}
+          className={`h-5 w-5 ${
+            i < rating ? "text-yellow-500" : "text-gray-400"
+          }`}
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -27,19 +31,24 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
   );
 };
 
-export default function HotelCard({ hotel, dayPlanId, itineraryId }: HotelCardProps) {
+export default function HotelCard({
+  hotel,
+  dayPlanId,
+  itineraryId,
+  hotels,
+}: HotelCardProps) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
   const handleChangeHotel = async () => {
     // Implement your hotel change logic here
-    console.log('Change hotel clicked');
+    console.log("Change hotel clicked");
   };
 
   const handleChangeRoom = () => {
     // Implement your room change logic here
-    console.log('Change room clicked');
+    console.log("Change room clicked");
   };
 
   return (
@@ -47,14 +56,19 @@ export default function HotelCard({ hotel, dayPlanId, itineraryId }: HotelCardPr
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <div className="text-gray-800 text-sm">
-            {hotel.location} | {hotel.roomInfo.numberOfRooms} Room | {hotel.roomInfo.guestsPerRoom} Adults
+            {hotel.location} | {hotel.roomInfo.numberOfRooms} Room |{" "}
+            {hotel.roomInfo.guestsPerRoom} Adults
           </div>
-          <button 
-            onClick={handleChangeHotel}
-            className="text-red-600 hover:text-red-800 text-sm font-semibold"
-          >
-            Change Hotel
-          </button>
+          <div className="mt-4">
+            <ChangeHotelButton
+              itineraryId={itineraryId}
+              dayPlanId={dayPlanId}
+              currentHotelId={hotel._id}
+              hotels={hotels}
+            >
+              Change Hotel
+            </ChangeHotelButton>
+          </div>
         </div>
 
         <div className="flex items-start">
@@ -67,18 +81,23 @@ export default function HotelCard({ hotel, dayPlanId, itineraryId }: HotelCardPr
             /> */}
             <p> IMg</p>
           </div>
-          
+
           <div>
-            <div className="font-bold text-black text-lg mb-1">{hotel.name}</div>
+            <div className="font-bold text-black text-lg mb-1">
+              {hotel.name}
+            </div>
             <StarRating rating={hotel.rating} />
-            <div className="text-gray-600 text-sm mt-1">{hotel.roomInfo.type}</div>
+            <div className="text-gray-600 text-sm mt-1">
+              {hotel.roomInfo.type}
+            </div>
             <div className="text-gray-600 text-sm">
               <span className="inline-block mr-2">{hotel.mealPlan}</span>
               {Object.entries(hotel.amenities)
                 .filter(([_, value]) => value === true)
                 .map(([key], index, arr) => (
                   <span key={key} className="capitalize">
-                    {key}{index < arr.length - 1 ? ' | ' : ''}
+                    {key}
+                    {index < arr.length - 1 ? " | " : ""}
                   </span>
                 ))}
             </div>
@@ -94,7 +113,7 @@ export default function HotelCard({ hotel, dayPlanId, itineraryId }: HotelCardPr
               </span>
             )}
           </div>
-          <button 
+          <button
             onClick={handleChangeRoom}
             className="text-blue-600 hover:text-blue-800 text-sm font-semibold"
           >
