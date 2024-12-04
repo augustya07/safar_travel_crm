@@ -1,16 +1,28 @@
 import { DayPlan as DayPlanType } from '@/types/itinerary';
 import HotelCard from './HotelCard';
-import { fetchHotels } from '@/lib/data';
+import { fetchActivities, fetchHotels, fetchServices, fetchSightseeings, fetchTransports } from '@/lib/data';
+import TransportCard from './TransportCard';
+import ActivityCard from './ActivityCard';
+import ServiceCard from './ServiceCard';
+import SightseeingCard from './SightseeingCard';
 
 interface DayPlanProps {
   dayPlan: DayPlanType;
   dayNumber: number;
   itineraryId: string;
-
+ 
 }
 
 export default async function DayPlan({ dayPlan, dayNumber, itineraryId }: DayPlanProps) {
     const hotels = await fetchHotels();
+    const transports = await fetchTransports();
+    const activities = await fetchActivities();
+    const services = await fetchServices();
+    const sightseeings = await fetchSightseeings();
+
+
+
+
 
   return (
     <div className="border rounded-lg p-6 mb-6 shadow-sm">
@@ -41,64 +53,72 @@ export default async function DayPlan({ dayPlan, dayNumber, itineraryId }: DayPl
 
       {/* Transport Section */}
       {dayPlan.transports.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-2">Transportation</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayPlan.transports.map((transport) => (
-              <div key={transport._id} className="border p-4 rounded-lg">
-                <h4 className="font-medium">{transport.type}</h4>
-                <div className="text-sm text-gray-600">
-                  <p>{transport.route.from} → {transport.route.to}</p>
-                  <p>Price: ₹{transport.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+    <div className="mb-4">
+      <h3 className="text-xl font-semibold mb-2">Transportation</h3>
+      <div className="space-y-4">
+        {dayPlan.transports.map((transport) => (
+          <TransportCard
+            key={transport._id}
+            transport={transport}
+            dayPlanId={dayPlan._id}
+            itineraryId={itineraryId}
+            transports={transports}
+          />
+        ))}
+      </div>
+    </div>
+  )}
 
       {/* Activities Section */}
       {dayPlan.activities.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-2">Activities</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayPlan.activities.map((activity) => (
-              <div key={activity._id} className="border p-4 rounded-lg">
-                <h4 className="font-medium">{activity.name}</h4>
-                <p className="text-sm text-gray-600">{activity.type}</p>
-                <p className="text-sm text-gray-600">₹{activity.price}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+    <div className="mb-4">
+      <h3 className="text-xl font-semibold mb-2">Activities</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {dayPlan.activities.map((activity) => (
+          <ActivityCard
+            key={activity._id}
+            activity={activity}
+            dayPlanId={dayPlan._id}
+            itineraryId={itineraryId}
+            activities={activities}
+          />
+        ))}
+      </div>
+    </div>
+  )}
 
       {/* Services Section */}
       {dayPlan.services.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-2">Services</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayPlan.services.map((service) => (
-              <div key={service._id} className="border p-4 rounded-lg">
-                <h4 className="font-medium">{service.name}</h4>
-                <p className="text-sm text-gray-600">₹{service.price}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+    <div className="mb-4">
+      <h3 className="text-xl font-semibold mb-2">Services</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {dayPlan.services.map((service) => (
+          <ServiceCard
+            key={service._id}
+            service={service}
+            dayPlanId={dayPlan._id}
+            itineraryId={itineraryId}
+            services={services}
+          />
+        ))}
+      </div>
+    </div>
+  )}
 
       {/* Sightseeing Section */}
       {dayPlan.sightseeing.length > 0 && (
         <div>
           <h3 className="text-xl font-semibold mb-2">Sightseeing</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayPlan.sightseeing.map((sight) => (
-              <div key={sight._id} className="border p-4 rounded-lg">
-                <h4 className="font-medium">{sight.name}</h4>
-                <p className="text-sm text-gray-600">{sight.description}</p>
-              </div>
-            ))}
+          {dayPlan.sightseeing.map((sight) => (
+          <SightseeingCard
+            key={sight._id}
+            sightseeing={sight}
+            dayPlanId={dayPlan._id}
+            itineraryId={itineraryId}
+            sightseeings={sightseeings}
+          />
+        ))}
           </div>
         </div>
       )}

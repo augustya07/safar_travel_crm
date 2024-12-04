@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { navLinks } from './nav-links'
 import { usePathname } from 'next/navigation'
-import Image from 'next/image'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 
 const Sidebar = () => {

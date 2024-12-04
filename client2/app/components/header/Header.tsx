@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { HiSearch, HiPlus, HiQuestionMarkCircle, HiBell, HiChat } from 'react-icons/hi'
 
 const Header = () => {

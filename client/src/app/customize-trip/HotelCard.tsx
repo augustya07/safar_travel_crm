@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { Hotel } from "@/types/itinerary";
 import ChangeHotelButton from "./ChangeHotelButton";
 

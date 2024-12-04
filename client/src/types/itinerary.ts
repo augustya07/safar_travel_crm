@@ -86,6 +86,20 @@ export interface Activity {
   updatedAt: string;
 }
 
+export interface PriceBreakdown {
+  accommodationCost: number;
+  transportCost: number;
+  activityCost: number;
+  serviceCost: number;
+  sightseeingCost: number;
+}
+
+export interface CalculatedPrice {
+  total: number;
+  breakdown: PriceBreakdown;
+  lastCalculated: string;
+}
+
 export interface DayPlan {
   _id: string;
   title: string;
@@ -97,6 +111,66 @@ export interface DayPlan {
   sightseeing: Sightseeing[];
   services: Service[];
   activities: Activity[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GeneralInfo {
+  _id: string;
+  itineraryType: string;
+  headerCoverImage: string;
+  templateTitle: string;
+  description: string;
+  numberPax: number;
+  typePax: string;
+  startingPoint: string;
+  droppingPoint: string;
+  createdBy: string;
+  lastUpdatedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AvailabilityPrices {
+  adult: number;
+  children: number;
+  infant: number;
+}
+
+export interface Availability {
+  _id: string;
+  tripStartDate: string;
+  tripEndDate: string;
+  prices: AvailabilityPrices;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IncludeExcludeItem {
+  _id: string;
+  title: string;
+}
+
+export interface OtherDetails {
+  _id: string;
+  includes: IncludeExcludeItem[];
+  excludes: IncludeExcludeItem[];
+  termsAndConditions: string;
+  cancellationConditions: string;
+  passportVisas: string;
+  travelInsurance: string;
+  medicalAdvice: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Itinerary {
+  _id: string;
+  general: GeneralInfo;
+  availability: Availability;
+  dayPlans: DayPlan[];
+  otherDetails: OtherDetails;
+  calculatedPrice: CalculatedPrice;
   createdAt: string;
   updatedAt: string;
 }

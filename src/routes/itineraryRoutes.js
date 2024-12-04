@@ -53,7 +53,7 @@ router.patch('/:itineraryId/dayPlan/:dayPlanId/sightseeing/:sightseeingId',Itine
 router.delete('/:itineraryId/dayPlan/:dayPlanId/sightseeing/:sightseeingId',ItinerarySightseeingController.removeSightseeingFromDayPlan);
 
 router.post('/:itineraryId/dayPlan/:dayPlanId/activity', ItineraryActivityController.addActivityToDayPlan);
-router.patch('/:itineraryId/dayPlan/:dayPlanId/activity/:activityId', ItineraryActivityController.updateActivityInDayPlan);
+router.patch('/:itineraryId/dayPlan/:dayPlanId/activity/:oldActivityId', ItineraryActivityController.updateActivityInDayPlan);
 router.delete('/:itineraryId/dayPlan/:dayPlanId/activity/:activityId', ItineraryActivityController.removeActivityFromDayPlan);
 
 
