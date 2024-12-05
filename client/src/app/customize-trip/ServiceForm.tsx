@@ -2,13 +2,15 @@
 
 import { Service } from "@/types/itinerary";
 import { useState } from "react";
-import { updateService } from "./serviceActions";
+import { addService, updateService } from "./serviceActions";
 
 interface ChangeServiceFormProps {
   itineraryId: string;
   dayPlanId: string;
   currentServiceId?: string;
   services: Service[];
+  isAdding?: boolean;
+
 }
 
 export default function ChangeServiceForm({
@@ -16,11 +18,13 @@ export default function ChangeServiceForm({
   dayPlanId,
   currentServiceId,
   services,
+  isAdding = false,
+
 }: ChangeServiceFormProps) {
   const [selectedServiceId, setSelectedServiceId] = useState(currentServiceId);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleUpdateService(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     try {
       setError(null);
 
@@ -33,22 +37,29 @@ export default function ChangeServiceForm({
       updatedFormData.append("itineraryId", itineraryId);
       updatedFormData.append("dayPlanId", dayPlanId);
       updatedFormData.append("serviceId", selectedServiceId);
-      updatedFormData.append("currentServiceId", currentServiceId || "");
-      
-      const result = await updateService(updatedFormData);
 
-      if (!result.success) {
-        setError(result.error || "Failed to update service");
-        return;
+      if (!isAdding) {
+        updatedFormData.append("currentServiceId", currentServiceId || "");
+        const result = await updateService(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to update service");
+          return;
+        }
+      } else {
+        const result = await addService(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to add service");
+          return;
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred");
-      console.error("Update service error:", err);
+      console.error("Service operation error:", err);
     }
   }
 
   return (
-    <form action={handleUpdateService} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="itineraryId" value={itineraryId} />
       <input type="hidden" name="dayPlanId" value={dayPlanId} />
       <input type="hidden" name="serviceId" value={selectedServiceId || ""} />
@@ -119,13 +130,16 @@ export default function ChangeServiceForm({
       </div>
 
       <div className="flex justify-end gap-2 pt-4 border-t">
-        <button
+      <button
           type="submit"
           disabled={!selectedServiceId}
           className={`px-4 py-2 rounded text-white
             ${selectedServiceId ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
         >
-          {selectedServiceId ? "Update Service" : "Select a Service"}
+          {isAdding ? 
+            (selectedServiceId ? "Add Service" : "Select a Service") :
+            (selectedServiceId ? "Update Service" : "Select a Service")
+          }
         </button>
       </div>
     </form>

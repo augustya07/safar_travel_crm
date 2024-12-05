@@ -2,13 +2,15 @@
 
 import { Transport } from "@/types/itinerary";
 import { useState } from "react";
-import { updateTransport } from "./transportActions";
+import { addTransport, updateTransport } from "./transportActions";
 
 interface ChangeTransportFormProps {
   itineraryId: string;
   dayPlanId: string;
   currentTransportId?: string;
   transports: Transport[];
+  isAdding?: boolean;
+
 }
 
 export default function ChangeTransportForm({
@@ -16,11 +18,12 @@ export default function ChangeTransportForm({
   dayPlanId,
   currentTransportId,
   transports,
+  isAdding = false,
 }: ChangeTransportFormProps) {
   const [selectedTransportId, setSelectedTransportId] = useState(currentTransportId);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleUpdateTransport(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     try {
       setError(null);
 
@@ -33,22 +36,29 @@ export default function ChangeTransportForm({
       updatedFormData.append("itineraryId", itineraryId);
       updatedFormData.append("dayPlanId", dayPlanId);
       updatedFormData.append("transportId", selectedTransportId);
-      updatedFormData.append("currentTransportId", currentTransportId || "");
       
-      const result = await updateTransport(updatedFormData);
-
-      if (!result.success) {
-        setError(result.error || "Failed to update transport");
-        return;
+      if (!isAdding) {
+        updatedFormData.append("currentTransportId", currentTransportId || "");
+        const result = await updateTransport(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to update transport");
+          return;
+        }
+      } else {
+        const result = await addTransport(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to add transport");
+          return;
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred");
-      console.error("Update transport error:", err);
+      console.error("Transport operation error:", err);
     }
   }
 
   return (
-    <form action={handleUpdateTransport} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="itineraryId" value={itineraryId} />
       <input type="hidden" name="dayPlanId" value={dayPlanId} />
       <input type="hidden" name="transportId" value={selectedTransportId || ""} />
@@ -104,7 +114,10 @@ export default function ChangeTransportForm({
           className={`px-4 py-2 rounded text-white
             ${selectedTransportId ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
         >
-          {selectedTransportId ? "Update Transport" : "Select a Transport Option"}
+          {isAdding ? 
+            (selectedTransportId ? "Add Transport" : "Select a Transport Option") :
+            (selectedTransportId ? "Update Transport" : "Select a Transport Option")
+          }
         </button>
       </div>
     </form>

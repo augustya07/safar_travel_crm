@@ -47,6 +47,12 @@ export interface Transport {
   frequency: string;
   route: Route;
   isActive: boolean;
+  departureTime?: string;  
+  arrivalTime?: string;    
+  duration?: string;       
+  class?: string;         
+  operator?: string;      
+  bookingStatus?: string; 
   createdAt: string;
   updatedAt: string;
 }

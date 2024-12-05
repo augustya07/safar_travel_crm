@@ -2,13 +2,15 @@
 
 import { Sightseeing } from "@/types/itinerary";
 import { useState } from "react";
-import { updateSightseeing } from "./sightseeingActions";
+import { addSightseeing, updateSightseeing } from "./sightseeingActions";
 
 interface ChangeSightseeingFormProps {
   itineraryId: string;
   dayPlanId: string;
   currentSightseeingId?: string;
   sightseeings: Sightseeing[];
+  isAdding?: boolean;
+
 }
 
 export default function ChangeSightseeingForm({
@@ -16,11 +18,13 @@ export default function ChangeSightseeingForm({
   dayPlanId,
   currentSightseeingId,
   sightseeings,
+  isAdding = false,
+
 }: ChangeSightseeingFormProps) {
   const [selectedSightseeingId, setSelectedSightseeingId] = useState(currentSightseeingId);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleUpdateSightseeing(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     try {
       setError(null);
 
@@ -33,22 +37,29 @@ export default function ChangeSightseeingForm({
       updatedFormData.append("itineraryId", itineraryId);
       updatedFormData.append("dayPlanId", dayPlanId);
       updatedFormData.append("sightseeingId", selectedSightseeingId);
-      updatedFormData.append("currentSightseeingId", currentSightseeingId || "");
-      
-      const result = await updateSightseeing(updatedFormData);
 
-      if (!result.success) {
-        setError(result.error || "Failed to update sightseeing");
-        return;
+      if (!isAdding) {
+        updatedFormData.append("currentSightseeingId", currentSightseeingId || "");
+        const result = await updateSightseeing(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to update sightseeing");
+          return;
+        }
+      } else {
+        const result = await addSightseeing(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to add sightseeing");
+          return;
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred");
-      console.error("Update sightseeing error:", err);
+      console.error("Sightseeing operation error:", err);
     }
   }
 
   return (
-    <form action={handleUpdateSightseeing} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="itineraryId" value={itineraryId} />
       <input type="hidden" name="dayPlanId" value={dayPlanId} />
       <input type="hidden" name="sightseeingId" value={selectedSightseeingId || ""} />
@@ -111,13 +122,16 @@ export default function ChangeSightseeingForm({
       </div>
 
       <div className="flex justify-end gap-2 pt-4 border-t">
-        <button
+      <button
           type="submit"
           disabled={!selectedSightseeingId}
           className={`px-4 py-2 rounded text-white
             ${selectedSightseeingId ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
         >
-          {selectedSightseeingId ? "Update Sightseeing" : "Select a Location"}
+          {isAdding ? 
+            (selectedSightseeingId ? "Add Sightseeing" : "Select a Location") :
+            (selectedSightseeingId ? "Update Sightseeing" : "Select a Location")
+          }
         </button>
       </div>
     </form>

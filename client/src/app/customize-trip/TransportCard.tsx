@@ -12,7 +12,7 @@ interface TransportCardProps {
 }
 
 const TransportIcon: React.FC<{ type: string }> = ({ type }) => {
-  // Add icons for different transport types
+  // Add icons for differnt transport types
   const icons = {
     train: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

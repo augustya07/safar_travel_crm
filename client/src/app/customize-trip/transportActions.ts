@@ -50,3 +50,48 @@ export async function updateTransport(formData: FormData) {
     };
   }
 }
+
+export async function addTransport(formData: FormData) {
+    try {
+      const itineraryId = formData.get('itineraryId');
+      const dayPlanId = formData.get('dayPlanId');
+      const transportId = formData.get('transportId');
+  
+      if (!itineraryId || !dayPlanId || !transportId) {
+        return { 
+          success: false, 
+          error: 'Missing required fields' 
+        };
+      }
+  
+      const response = await fetch(
+        `${API_URL}/itineraries/${itineraryId}/dayPlan/${dayPlanId}/transport`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ transportId }),
+          cache: 'no-store'
+        }
+      );
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { 
+          success: false, 
+          error: errorData.message || 'Failed to add transport' 
+        };
+      }
+  
+      revalidatePath(`/customize-trip/${itineraryId}`);
+      return { success: true };
+  
+    } catch (error) {
+      console.error('Transport add error:', error);
+      return { 
+        success: false, 
+        error: 'Failed to connect to server' 
+      };
+    }
+  }

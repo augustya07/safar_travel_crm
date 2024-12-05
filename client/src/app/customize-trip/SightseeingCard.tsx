@@ -58,12 +58,13 @@ export default function SightseeingCard({
           <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
             {sightseeing.images.slice(1).map((image, index) => (
               <div key={index} className="relative h-16 w-16 flex-shrink-0">
-                <Image
+                {/* <Image
                   src={image}
                   alt={`${sightseeing.name} - ${index + 2}`}
                   fill
                   className="object-cover rounded"
-                />
+                /> */}
+                <p> Img</p>
               </div>
             ))}
           </div>

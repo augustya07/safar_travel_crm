@@ -2,13 +2,15 @@
 
 import { Activity } from "@/types/itinerary";
 import { useState } from "react";
-import { updateActivity } from "./activityActions";
+import { addActivity, updateActivity } from "./activityActions";
 
 interface ChangeActivityFormProps {
   itineraryId: string;
   dayPlanId: string;
   currentActivityId?: string;
   activities: Activity[];
+  isAdding?: boolean;
+
 }
 
 export default function ChangeActivityForm({
@@ -16,12 +18,13 @@ export default function ChangeActivityForm({
   dayPlanId,
   currentActivityId,
   activities,
+  isAdding = false,
 }: ChangeActivityFormProps) {
   const [selectedActivityId, setSelectedActivityId] = useState(currentActivityId);
   const [error, setError] = useState<string |  null>(null);
   console.log(error)
 
-  async function handleUpdateActivity(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     try {
       setError(null);
 
@@ -30,26 +33,33 @@ export default function ChangeActivityForm({
         return;
       }
 
-    //   const updatedFormData = new FormData();
-    //   updatedFormData.append("itineraryId", itineraryId);
-    //   updatedFormData.append("dayPlanId", dayPlanId);
-    //   updatedFormData.append("activityId", selectedActivityId);
-    //   updatedFormData.append("currentActivityId", currentActivityId || "");
-      
-      const result = await updateActivity(formData);
+      const updatedFormData = new FormData();
+      updatedFormData.append("itineraryId", itineraryId);
+      updatedFormData.append("dayPlanId", dayPlanId);
+      updatedFormData.append("activityId", selectedActivityId);
 
-      if (!result.success) {
-        setError(result.error || "Failed to update activity");
-        return;
+      if (!isAdding) {
+        updatedFormData.append("currentActivityId", currentActivityId || "");
+        const result = await updateActivity(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to update activity");
+          return;
+        }
+      } else {
+        const result = await addActivity(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to add activity");
+          return;
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred");
-      console.error("Update activity error:", err);
+      console.error("Activity operation error:", err);
     }
   }
 
   return (
-    <form action={handleUpdateActivity} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="itineraryId" value={itineraryId} />
       <input type="hidden" name="dayPlanId" value={dayPlanId} />
       <input type="hidden" name="activityId" value={selectedActivityId || ""} />
@@ -116,7 +126,10 @@ export default function ChangeActivityForm({
           className={`px-4 py-2 rounded text-white
             ${selectedActivityId ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
         >
-          {selectedActivityId ? "Update Activity" : "Select an Activity"}
+          {isAdding ? 
+            (selectedActivityId ? "Add Activity" : "Select an Activity") :
+            (selectedActivityId ? "Update Activity" : "Select an Activity")
+          }
         </button>
       </div>
     </form>

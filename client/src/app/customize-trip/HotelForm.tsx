@@ -2,13 +2,15 @@
 
 import { Hotel } from "@/types/itinerary";
 import { useState } from "react";
-import { updateHotel } from "./hotelActions";
+import { addHotel, updateHotel } from "./hotelActions";
 
 interface ChangeHotelFormProps {
   itineraryId: string;
   dayPlanId: string;
   currentHotelId?: string;
   hotels: Hotel[];
+  isAdding?: boolean;
+
 }
 
 export default function ChangeHotelForm({
@@ -16,12 +18,13 @@ export default function ChangeHotelForm({
   dayPlanId,
   currentHotelId,
   hotels,
+  isAdding = false,
 }: ChangeHotelFormProps) {
   // Add state to track selected hotel
   const [selectedHotelId, setSelectedHotelId] = useState(currentHotelId);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleUpdateHotel(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     try {
       setError(null);
 
@@ -34,21 +37,29 @@ export default function ChangeHotelForm({
       updatedFormData.append("itineraryId", itineraryId);
       updatedFormData.append("dayPlanId", dayPlanId);
       updatedFormData.append("hotelId", selectedHotelId);
-      updatedFormData.append("currentHotelId", currentHotelId || "");
-      const result = await updateHotel(updatedFormData);
-
-      if (!result.success) {
-        setError(result.error || "Failed to update hotel");
-        return;
+      
+      if (!isAdding) {
+        updatedFormData.append("currentHotelId", currentHotelId || "");
+        const result = await updateHotel(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to update hotel");
+          return;
+        }
+      } else {
+        const result = await addHotel(updatedFormData);
+        if (!result.success) {
+          setError(result.error || "Failed to add hotel");
+          return;
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred");
-      console.error("Update hotel error:", err);
+      console.error("Hotel operation error:", err);
     }
   }
 
   return (
-    <form action={handleUpdateHotel} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="itineraryId" value={itineraryId} />
       <input type="hidden" name="dayPlanId" value={dayPlanId} />
       <input type="hidden" name="hotelId" value={selectedHotelId || ""} />
